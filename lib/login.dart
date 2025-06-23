@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'signup.dart';
 import 'resetpassword.dart';
+import 'main.dart'; // Import your HomePage
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -136,7 +137,11 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // handle login
+                // Navigate to HomePage
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
               },
               child: const Text(
                 'Sign In',
