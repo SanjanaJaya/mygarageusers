@@ -78,9 +78,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
         child: SafeArea(
-          child: Container(
-            height: 65,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: SizedBox(
+            height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -93,23 +92,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Clean Header
-              _buildCleanHeader(),
+        bottom: false, // Important for bottom overflow fix
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - 60, // Account for nav bar
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Clean Header
+                    _buildCleanHeader(),
 
-              // Main Menu
-              const SizedBox(height: 25),
-              _buildMainMenu(),
+                    // Main Menu
+                    const SizedBox(height: 25),
+                    _buildMainMenu(),
 
-              // Recent Activity Section
-              const SizedBox(height: 35),
-              _buildRecentSection(),
-              const SizedBox(height: 20),
-            ],
-          ),
+                    // Recent Activity Section
+                    const SizedBox(height: 35),
+                    _buildRecentSection(),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -192,7 +201,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 child: Image.asset(
                   'assets/worker.png',
                   height: 32,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(width: 12),
@@ -294,10 +302,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               physics: const NeverScrollableScrollPhysics(),
               childAspectRatio: 1.1,
               children: [
-                _buildServiceTile(Icons.build, "Garage\nService", const Color(0xFF4CAF50)),
-                _buildServiceTile(Icons.local_shipping, "Recovery\nService", const Color(0xFF2196F3)),
-                _buildServiceTile(Icons.local_gas_station, "Fuel\nStation", const Color(0xFFFF9800)),
-                _buildServiceTile(Icons.directions_car, "Rent A\nCar", const Color(0xFF9C27B0)),
+                _buildServiceTile(Icons.build, "Garage\nService"),
+                _buildServiceTile(Icons.local_shipping, "Recovery\nService"),
+                _buildServiceTile(Icons.local_gas_station, "Fuel\nStation"),
+                _buildServiceTile(Icons.directions_car, "Rent A\nCar"),
               ],
             ),
           ),
@@ -306,17 +314,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildServiceTile(IconData icon, String label, Color color) {
+  Widget _buildServiceTile(IconData icon, String label) {
+    const Color serviceColor = Color(0xFFFFCC33); // Single yellow color for all services
     return GestureDetector(
       onTap: () {
         // Add navigation logic here
       },
       child: Container(
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: serviceColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: color.withOpacity(0.2),
+            color: serviceColor.withOpacity(0.3),
             width: 1,
           ),
         ),
@@ -326,7 +335,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color,
+                color: serviceColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -338,10 +347,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             const SizedBox(height: 12),
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: color,
+                color: Color(0xFF1A1A1A),
               ),
               textAlign: TextAlign.center,
             ),
